@@ -410,24 +410,24 @@ static int tpd_fb_notifier_callback(struct notifier_block *self, unsigned long e
 		return 0;
 
 	blank = *(int *)evdata->data;
-	TPD_DMESG("fb_notify(blank=%d)\n", blank);
+	TPD_DEBUG("fb_notify(blank=%d)\n", blank);
 	switch (blank) {
 	case FB_BLANK_UNBLANK:
-		TPD_DMESG("LCD ON Notify\n");
+		TPD_DEBUG("LCD ON Notify\n");
 		if (g_tpd_drv && tpd_suspend_flag) {
 			err = queue_work(touch_resume_workqueue, &touch_resume_work);
-			if (!err) {
+			if (err) {
 				TPD_DMESG("start touch_resume_workqueue failed\n");
 				return err;
 			}
 		}
 		break;
 	case FB_BLANK_POWERDOWN:
-		TPD_DMESG("LCD OFF Notify\n");
+		TPD_DEBUG("LCD OFF Notify\n");
 		if (g_tpd_drv && !tpd_suspend_flag) {
 			err = cancel_work_sync(&touch_resume_work);
-			if (!err)
-				TPD_DMESG("cancel touch_resume_workqueue err = %d\n", err);
+			if (err)
+				TPD_DEBUG("cancel touch_resume_workqueue err = %d\n", err);
 			g_tpd_drv->suspend(NULL);
 		}
 		tpd_suspend_flag = 1;
@@ -520,7 +520,7 @@ static int tpd_probe(struct platform_device *pdev)
 #endif
 #endif
 
-	TPD_DMESG("enter %s, %d\n", __func__, __LINE__);
+	TPD_DEBUG("enter %s, %d\n", __func__, __LINE__);
 
 	if (misc_register(&tpd_misc_device))
 		pr_err("mtk_tpd: tpd_misc_device register failed\n");

@@ -304,7 +304,7 @@ unsigned int __spm_output_wake_reason(const struct wake_status *wakesta,
 
 	WARN_ON(log_size >= 1024);
 
-	spm_print(suspend, "%s", log_buf);
+	spm_debug("%s", log_buf);
 
 	return wr;
 }

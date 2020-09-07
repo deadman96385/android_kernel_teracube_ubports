@@ -3603,7 +3603,7 @@ void battery_shutdown(struct platform_device *dev)
 
 static int battery_suspend(struct platform_device *dev, pm_message_t state)
 {
-	bm_err("******** %s!! iavg=%d ***GM3 disable:%d %d %d %d***\n",
+	bm_debug("******** %s!! iavg=%d ***GM3 disable:%d %d %d %d***\n",
 		__func__,
 		gm.hw_status.iavg_intr_flag,
 		gm.disableGM30,
@@ -3621,7 +3621,7 @@ static int battery_suspend(struct platform_device *dev, pm_message_t state)
 
 static int battery_resume(struct platform_device *dev)
 {
-	bm_err("******** %s!! iavg=%d ***GM3 disable:%d %d %d %d***\n",
+	bm_debug("******** %s!! iavg=%d ***GM3 disable:%d %d %d %d***\n",
 		__func__,
 		gm.hw_status.iavg_intr_flag,
 		gm.disableGM30,

@@ -1621,7 +1621,7 @@ void fg_bat_temp_int_sw_check(void)
 	if (gm.disableGM30)
 		return;
 
-	bm_err(
+	bm_debug(
 		"[%s] tmp %d lt %d ht %d\n",
 		__func__,
 		tmp, gm.fg_bat_tmp_lt,
@@ -1746,7 +1746,7 @@ void fg_sw_bat_cycle_accu(void)
 	}
 
 	gauge_dev_get_hw_status(gm.gdev, &gm.hw_status, 0);
-	bm_err("[%s]car[o:%d n:%d],diff_car:%d,ncar[o:%d n:%d hw:%d] thr %d\n",
+	bm_debug("[%s]car[o:%d n:%d],diff_car:%d,ncar[o:%d n:%d hw:%d] thr %d\n",
 		__func__,
 		tmp_car, fg_coulomb, diff_car,
 		tmp_ncar, gm.bat_cycle_ncar, gm.gdev->fg_hw_info.ncar,
@@ -1908,7 +1908,7 @@ void fg_bat_temp_int_internal(void)
 		gauge_dev_enable_battery_tmp_ht_interrupt(
 			gm.gdev, true, fg_bat_new_ht);
 	}
-	bm_err("[%s][FG_TEMP_INT] T[%d] V[%d %d] C[%d %d] h[%d %d]\n",
+	bm_debug("[%s][FG_TEMP_INT] T[%d] V[%d %d] C[%d %d] h[%d %d]\n",
 		__func__,
 		tmp, gm.fg_bat_tmp_ht,
 		gm.fg_bat_tmp_lt, gm.fg_bat_tmp_c_ht,
@@ -1934,7 +1934,7 @@ void fg_bat_temp_int_h_handler(void)
 	if (fg_interrupt_check() == false)
 		return;
 
-	bm_err("[%s]\n", __func__);
+	bm_debug("[%s]\n", __func__);
 	fg_bat_temp_int_internal();
 }
 
@@ -2031,7 +2031,7 @@ void fg_nafg_int_handler(void)
 	gm.hw_status.sw_car_nafg_dltv = nafg_dltv;
 	gm.hw_status.sw_car_nafg_c_dltv = nafg_c_dltv;
 
-	bm_err(
+	bm_debug(
 		"[%s][fg_bat_nafg] [%d:%d:%d]\n",
 		__func__,
 		nafg_cnt, nafg_dltv, nafg_c_dltv);
@@ -2061,7 +2061,7 @@ int fg_bat_int1_h_handler(struct gauge_consumer *consumer)
 	gauge_coulomb_start(&gm.coulomb_plus, gm.fg_bat_int1_gap);
 	gauge_coulomb_start(&gm.coulomb_minus, -gm.fg_bat_int1_gap);
 
-	bm_err("[%s] car:%d ht:%d lt:%d gap:%d\n",
+	bm_debug("[%s] car:%d ht:%d lt:%d gap:%d\n",
 		__func__,
 		fg_coulomb, gm.fg_bat_int1_ht,
 		gm.fg_bat_int1_lt, gm.fg_bat_int1_gap);
@@ -2085,7 +2085,7 @@ int fg_bat_int1_l_handler(struct gauge_consumer *consumer)
 	gauge_coulomb_start(&gm.coulomb_plus, gm.fg_bat_int1_gap);
 	gauge_coulomb_start(&gm.coulomb_minus, -gm.fg_bat_int1_gap);
 
-	bm_err("[%s] car:%d ht:%d lt:%d gap:%d\n",
+	bm_debug("[%s] car:%d ht:%d lt:%d gap:%d\n",
 		__func__,
 		fg_coulomb, gm.fg_bat_int1_ht,
 		gm.fg_bat_int1_lt, gm.fg_bat_int1_gap);
@@ -2101,7 +2101,7 @@ int fg_bat_int2_h_handler(struct gauge_consumer *consumer)
 	int fg_coulomb = 0;
 
 	fg_coulomb = gauge_get_coulomb();
-	bm_err("[%s] car:%d ht:%d\n",
+	bm_debug("[%s] car:%d ht:%d\n",
 		__func__,
 		fg_coulomb, gm.fg_bat_int2_ht);
 
@@ -2119,7 +2119,7 @@ int fg_bat_int2_l_handler(struct gauge_consumer *consumer)
 	int fg_coulomb = 0;
 
 	fg_coulomb = gauge_get_coulomb();
-	bm_err("[%s] car:%d lt:%d\n",
+	bm_debug("[%s] car:%d lt:%d\n",
 		__func__,
 		fg_coulomb, gm.fg_bat_int2_lt);
 
@@ -2194,13 +2194,13 @@ void fg_drv_update_hw_status(void)
 	chr_vol = pmic_get_vbus();
 	tmp = force_get_tbat(true);
 
-	bm_err("lbat %d %d %d %d\n",
+	bm_debug("lbat %d %d %d %d\n",
 		gm.sw_low_battery_ht_en,
 		gm.sw_low_battery_ht_threshold,
 		gm.sw_low_battery_lt_en,
 		gm.sw_low_battery_lt_threshold);
 
-	bm_err("car[%d,%ld,%ld,%ld,%ld, cycle_car:%d,ncar:%d] c:%d %d vbat:%d vbus:%d soc:%d %d gm3:%d %d %d %d\n",
+	bm_debug("car[%d,%ld,%ld,%ld,%ld, cycle_car:%d,ncar:%d] c:%d %d vbat:%d vbus:%d soc:%d %d gm3:%d %d %d %d\n",
 		fg_coulomb, gm.coulomb_plus.end,
 		gm.coulomb_minus.end, gm.soc_plus.end,
 		gm.soc_minus.end,
@@ -2218,7 +2218,7 @@ void fg_drv_update_hw_status(void)
 	fg_current_iavg = gauge_get_average_current(&valid);
 	fg_nafg_monitor();
 
-	bm_err("tmp:%d %d %d hcar2:%d lcar2:%d time:%d sw_iavg:%d %d %d nafg_m:%d %d %d\n",
+	bm_debug("tmp:%d %d %d hcar2:%d lcar2:%d time:%d sw_iavg:%d %d %d nafg_m:%d %d %d\n",
 		tmp, gm.fg_bat_tmp_int_ht, gm.fg_bat_tmp_int_lt,
 		gm.fg_bat_int2_ht, gm.fg_bat_int2_lt,
 		fg_get_system_sec(), gm.sw_iavg, fg_current_iavg, valid,
@@ -2776,12 +2776,12 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 			if (gm.g_fgd_pid == 0) {
 				memcpy(&gm.g_fgd_pid, &msg->fgd_data[0],
 					sizeof(gm.g_fgd_pid));
-				bm_err("[fr] FG_DAEMON_CMD_SET_DAEMON_PID = %d(first launch)\n",
+				bm_debug("[fr] FG_DAEMON_CMD_SET_DAEMON_PID = %d(first launch)\n",
 					gm.g_fgd_pid);
 			} else {
 				memcpy(&gm.g_fgd_pid, &msg->fgd_data[0],
 					sizeof(gm.g_fgd_pid));
-				bm_err(
+				bm_debug(
 					"[fr]FG_DAEMON_CMD_SET_DAEMON_PID=%d,kill daemon case, %d\n",
 					gm.g_fgd_pid,
 					get_ec()->debug_kill_daemontest);
@@ -2820,7 +2820,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 
 	case FG_DAEMON_CMD_FGADC_RESET:
 		{
-			bm_err("[fr] fgadc_reset\n");
+			bm_debug("[fr] fgadc_reset\n");
 			gauge_reset_hw();
 		}
 		break;
@@ -2852,7 +2852,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 	case FG_DAEMON_CMD_GET_CUSTOM_SETTING:
 		{
 			fg_cmd_check(msg);
-			bm_err("[fr] data len:%d custom data length = %d\n",
+			bm_debug("[fr] data len:%d custom data length = %d\n",
 				(int)sizeof(fg_cust_data),
 				ret_msg->fgd_data_len);
 
@@ -2944,7 +2944,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		gauge_coulomb_start(&gm.coulomb_plus, gm.fg_bat_int1_gap);
 		gauge_coulomb_start(&gm.coulomb_minus, -gm.fg_bat_int1_gap);
 
-		bm_err(
+		bm_debug(
 			"[fr] FG_DAEMON_CMD_SET_FG_BAT_INT1_GAP = %d car:%d\n",
 			gm.fg_bat_int1_gap, fg_coulomb);
 	}
@@ -2955,7 +2955,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		memcpy(&gm.fg_bat_int2_ht,
 			&msg->fgd_data[0], sizeof(gm.fg_bat_int2_ht));
 		gauge_coulomb_start(&gm.soc_plus, gm.fg_bat_int2_ht);
-		bm_err(
+		bm_debug(
 			"[fr][fg_bat_int2] FG_DAEMON_CMD_SET_FG_BAT_INT2_HT_GAP = %d\n",
 			gm.fg_bat_int2_ht);
 	}
@@ -2966,7 +2966,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		memcpy(&gm.fg_bat_int2_lt,
 			&msg->fgd_data[0], sizeof(gm.fg_bat_int2_lt));
 		gauge_coulomb_start(&gm.soc_minus, -gm.fg_bat_int2_lt);
-		bm_err(
+		bm_debug(
 			"[fr][fg_bat_int2] FG_DAEMON_CMD_SET_FG_BAT_INT2_LT_GAP = %d\n",
 			gm.fg_bat_int2_lt);
 	}
@@ -3355,7 +3355,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		gauge_dev_set_battery_cycle_interrupt(
 			gm.gdev, gm.bat_cycle_thr);
 
-		bm_err(
+		bm_debug(
 			"[fr] FG_DAEMON_CMD_SET_BATTERY_CYCLE_THRESHOLD = %d\n",
 			gm.bat_cycle_thr);
 
@@ -3429,7 +3429,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 
 		ret_msg->fgd_data_len += sizeof(d0_c_cust);
 		memcpy(ret_msg->fgd_data, &d0_c_cust, sizeof(d0_c_cust));
-		bm_err(
+		bm_debug(
 			"[fr] FG_DAEMON_CMD_GET_D0_C_CUST = %d\n",
 			d0_c_cust);
 	}
@@ -3445,7 +3445,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 
 		ret_msg->fgd_data_len += sizeof(d0_v_cust);
 		memcpy(ret_msg->fgd_data, &d0_v_cust, sizeof(d0_v_cust));
-		bm_err(
+		bm_debug(
 			"[fr] FG_DAEMON_CMD_GET_D0_V_CUST = %d\n",
 			d0_v_cust);
 	}
@@ -3461,7 +3461,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 
 		ret_msg->fgd_data_len += sizeof(uisoc_cust);
 		memcpy(ret_msg->fgd_data, &uisoc_cust, sizeof(uisoc_cust));
-		bm_err(
+		bm_debug(
 			"[fr] FG_DAEMON_CMD_GET_UISOC_CUST = %d\n",
 			uisoc_cust);
 	}
@@ -3506,7 +3506,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 			memcpy(ret_msg->fgd_data, &shutdown_car_diff,
 				sizeof(shutdown_car_diff));
 
-			bm_err("FG_DAEMON_CMD_GET_HW_INFO (GAUGE_SHUTDOWN_CAR): %d, cmdtype:%d\n",
+			bm_debug("FG_DAEMON_CMD_GET_HW_INFO (GAUGE_SHUTDOWN_CAR): %d, cmdtype:%d\n",
 				shutdown_car_diff, cmdtype);
 		} else if (cmdtype == HW_INFO_NCAR) {
 			if (gauge_get_hw_version() >= GAUGE_HW_V1000 &&
@@ -3576,7 +3576,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 
 		ret_msg->fgd_data_len += sizeof(iavg_valid);
 		memcpy(ret_msg->fgd_data, &iavg_valid, sizeof(iavg_valid));
-		bm_err(
+		bm_debug(
 			"[fr] FG_DAEMON_CMD_GET_FG_CURRENT_IAVG_VALID = %d\n",
 			iavg_valid);
 	}
@@ -3594,7 +3594,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		if (soc_type == 0)
 			gm.soc = (daemon_soc + 50) / 100;
 
-		bm_err(
+		bm_debug(
 		"[fg_res]FG_DAEMON_CMD_SET_KERNEL_SOC = %d %d, type:%d\n",
 		daemon_soc, gm.soc, soc_type);
 
@@ -3747,7 +3747,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 	case FG_DAEMON_CMD_PRINT_LOG:
 	{
 		fg_cmd_check(msg);
-		bm_err("%s", &msg->fgd_data[0]);
+		bm_debug("%s", &msg->fgd_data[0]);
 	}
 	break;
 
@@ -3758,7 +3758,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		memset(gm.proc_log, 0, 4096);
 		strncpy(gm.proc_log, &msg->fgd_data[0],
 			strlen(&msg->fgd_data[0]));
-		bm_err("[fr] FG_DAEMON_CMD_DUMP_LOG %d %d %d\n",
+		bm_debug("[fr] FG_DAEMON_CMD_DUMP_LOG %d %d %d\n",
 			msg->fgd_subcmd, msg->fgd_subcmd_para1,
 			(int)strlen(&msg->fgd_data[0]));
 	}
@@ -3773,7 +3773,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		ret_msg->fgd_data_len += sizeof(rtc_ui_soc);
 		memcpy(ret_msg->fgd_data, &rtc_ui_soc,
 			sizeof(rtc_ui_soc));
-		bm_err("[fr] FG_DAEMON_CMD_GET_RTC_UI_SOC = %d\n",
+		bm_debug("[fr] FG_DAEMON_CMD_GET_RTC_UI_SOC = %d\n",
 			rtc_ui_soc);
 	}
 	break;
@@ -3804,7 +3804,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 
 		memcpy(&_soc, &msg->fgd_data[0], sizeof(_soc));
 		gauge_dev_set_info(gm.gdev, GAUGE_CON0_SOC, _soc);
-		bm_err("[fg_res] FG_DAEMON_CMD_SET_CON0_SOC = %d\n", _soc);
+		bm_debug("[fg_res] FG_DAEMON_CMD_SET_CON0_SOC = %d\n", _soc);
 	}
 	break;
 
@@ -3816,7 +3816,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		ret_msg->fgd_data_len += sizeof(_soc);
 		memcpy(ret_msg->fgd_data, &_soc, sizeof(_soc));
 
-		bm_err("[fg_res] FG_DAEMON_CMD_GET_CON0_SOC = %d\n", _soc);
+		bm_debug("[fg_res] FG_DAEMON_CMD_GET_CON0_SOC = %d\n", _soc);
 
 	}
 	break;
@@ -3840,7 +3840,7 @@ void bmd_ctrl_cmd_from_user(void *nl_data, struct fgd_nl_msg_t *ret_msg)
 		gauge_dev_get_info(gm.gdev, GAUGE_IS_NVRAM_FAIL_MODE, &flag);
 		ret_msg->fgd_data_len += sizeof(flag);
 		memcpy(ret_msg->fgd_data, &flag, sizeof(flag));
-		bm_err(
+		bm_debug(
 			"[fg_res] FG_DAEMON_CMD_GET_NVRAM_FAIL_STATUS = %d\n",
 			flag);
 	}

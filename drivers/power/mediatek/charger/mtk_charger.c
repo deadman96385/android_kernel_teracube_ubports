@@ -1111,7 +1111,7 @@ int charger_psy_event(struct notifier_block *nb, unsigned long event, void *v)
 			tmp = val.intval / 10;
 			if (info->battery_temperature != tmp && mt_get_charger_type() != CHARGER_UNKNOWN) {
 				_wake_up_charger(info);
-				chr_err("charger_psy_event %ld %s tmp:%d %d chr:%d\n", event, psy->desc->name, tmp,
+				chr_debug("charger_psy_event %ld %s tmp:%d %d chr:%d\n", event, psy->desc->name, tmp,
 					info->battery_temperature, mt_get_charger_type());
 			}
 		}
@@ -1145,7 +1145,7 @@ static int mtk_charger_plug_in(struct charger_manager *info, enum charger_type c
 	info->safety_timeout = false;
 	info->vbusov_stat = false;
 
-	chr_err("mtk_is_charger_on plug in, tyupe:%d\n", chr_type);
+	chr_debug("mtk_is_charger_on plug in, tyupe:%d\n", chr_type);
 	if (info->plug_in != NULL)
 		info->plug_in(info);
 
@@ -1429,7 +1429,7 @@ static void charger_check_status(struct charger_manager *info)
 stop_charging:
 	mtk_battery_notify_check(info);
 
-	chr_err("tmp:%d (jeita:%d sm:%d cv:%d en:%d) (sm:%d) en:%d c:%d s:%d ov:%d %d %d\n",
+	chr_debug("tmp:%d (jeita:%d sm:%d cv:%d en:%d) (sm:%d) en:%d c:%d s:%d ov:%d %d %d\n",
 		temperature, info->enable_sw_jeita, info->sw_jeita.sm,
 		info->sw_jeita.cv, info->sw_jeita.charging, thermal->sm,
 		charging, info->cmd_discharging, info->safety_timeout,
@@ -1529,7 +1529,7 @@ static int charger_routine_thread(void *arg)
 		info->charger_thread_timeout = false;
 		bat_current = battery_get_bat_current();
 		chg_current = pmic_get_charging_current();
-		chr_err("Vbat=%d,Ibat=%d,I=%d,VChr=%d,T=%d,Soc=%d:%d,CT:%d:%d hv:%d pd:%d:%d\n",
+		chr_debug("Vbat=%d,Ibat=%d,I=%d,VChr=%d,T=%d,Soc=%d:%d,CT:%d:%d hv:%d pd:%d:%d\n",
 			battery_get_bat_voltage(), bat_current, chg_current,
 			battery_get_vbus(), battery_get_bat_temperature(),
 			battery_get_bat_soc(), battery_get_bat_uisoc(),
